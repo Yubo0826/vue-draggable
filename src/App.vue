@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <draggable tag="div" v-model="list" v-slot="{ element }">
-      <div class="draggable" :style="{'background': element.bg_color, 'color': element.color}">
+      <div class="draggable" :style="{'background': element.color}">
         {{ element.name }}, {{ element.number }}
       </div>
     </draggable> 
@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         <tr v-for="item in list" :key="item.name">
-          <td v-for="header in headers" :key="header">{{ item[header] }}</td>
+          <td v-for="header, index in headers" :key="index">{{ header }}</td>
         </tr>
       </tbody>
     </table>
@@ -33,6 +33,8 @@
         </tr>
       </draggable>
     </table>
+
+    <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" target="_blank">View Code</a>
   </div>
 </template>
 
@@ -41,32 +43,35 @@ import draggable from './draggable'
 // import draggable from './components/Draggable.vue'
 import { ref } from 'vue'
 
-const headers = ref(['name', 'number', 'color'])
+interface Item {
+  name: string;
+  number: string;
+  color: string;
+}
 
-const list = ref([
+
+const headers = ref<string[]>(['name', 'number', 'color']) 
+
+const list = ref<Item[]>([
   {
-    name: 'LBJ',
+    name: 'King James',
     number: '23',
-    bg_color: 'yellow',
-    color: 'black'
+    color: 'yellow'
   },
   {
     name: 'Wemby',
     number: '1',
-    bg_color: 'silver',
-    color: 'black'
+    color: 'silver'
   },
   {
-    name: 'Luka',
+    name: 'Luka Magic',
     number: '77',
-    bg_color: 'blue',
-    color: 'white'
+    color: 'dodgerblue'
   },
   {
-    name: 'Tre',
-    number: '88',
-    bg_color: 'red',
-    color: 'white'
+    name: 'D-Rose',
+    number: '1',
+    color: 'crimson'
   }
 ])
 

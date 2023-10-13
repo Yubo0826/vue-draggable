@@ -1,36 +1,41 @@
 import { ref, defineComponent, h, onMounted } from 'vue'
 
-const mainFunc = function(props, { slots, emit }) {
+interface DraggableProps {
+  modelValue: Array<any>;
+  tag: string;
+}
+
+const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
   console.log(props)
-  const wrapDom = ref(null)
-  let fromDom
-  let toDom
+  const wrapDom = ref<HTMLElement | null>(null)
+  let fromDom: HTMLElement | null
+  let toDom: HTMLElement | null
 
   onMounted(() => {
     // 為slot裡的根元素加上所需屬性
-    let itemList = wrapDom.value.children
+    let itemList = wrapDom.value?.children
     for (let i = 0; i < itemList.length; i++) {
       itemList[i].setAttribute('draggable', 'true')
-      itemList[i].setAttribute('id', i)
+      itemList[i].setAttribute('id', i.toString())
       itemList[i].addEventListener('dragstart', dragstart)
       itemList[i].addEventListener('dragenter', dragEnter)
     }
   })
 
-  function dragstart(event) {
+  function dragstart(event: DragEvent) {
     console.log('dragstart')
-    fromDom = event.target
+    fromDom = event.target as HTMLElement
   }
 
-  function dragEnter(event) {
+  function dragEnter(event: DragEvent) {
     console.log('dragEnter')
-    toDom = event.currentTarget
+    toDom = event.currentTarget as HTMLElement
     if (toDom !== fromDom) {
       swap(fromDom, toDom)
     }
   }
 
-  function updatePostion(from, to) {
+  function updatePostion(from: number, to: number) {
     console.log('updatePostion' + from + to)
     // 編譯器會把宣告那行與解構賦值那行搞混成一行
     // 所以要用分號隔開
@@ -41,10 +46,10 @@ const mainFunc = function(props, { slots, emit }) {
     emit('update:modelValue', newList)
   }
 
-  function swap(from, to) {
+  function swap(from: HTMLElement, to: HTMLElement) {
     console.log('swap function!')
-    const fromIndex = parseInt(from.getAttribute('id'))
-    const toIndex = parseInt(to.getAttribute('id'))
+    const fromIndex = parseInt(from.getAttribute('id')!)
+    const toIndex = parseInt(to.getAttribute('id')!)
     updatePostion(fromIndex, toIndex)
   }
 
@@ -70,4 +75,4 @@ const draggableComp = defineComponent(
   }
 )
 
-export default draggableComp
+export default draggableComp;
