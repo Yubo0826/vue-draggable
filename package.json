@@ -1,7 +1,16 @@
 {
-  "name": "draggable-vue",
-  "version": "0.0.0",
-  "private": true,
+  "name": "vue-draggable-yubo",
+  "version": "1.0.0",
+  "type": "module",
+  "files": ["dist"],
+  "main": "./dist/vue-draggable.umd.cjs",
+  "module": "./dist/vue-draggable.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-draggable.js",
+      "require": "./dist/vue-draggable.umd.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",

@@ -26,8 +26,14 @@ const mainFunc = function(props, { slots, emit }) {
     console.log('dragEnter')
     toDom = event.currentTarget
     if (toDom !== fromDom) {
-      swap(fromDom, toDom)
+      getElementIndex(fromDom, toDom)
     }
+  }
+
+  function getElementIndex(from, to) {
+    const fromIndex = parseInt(from.getAttribute('id'))
+    const toIndex = parseInt(to.getAttribute('id'))
+    updatePostion(fromIndex, toIndex)
   }
 
   function updatePostion(from, to) {
@@ -35,17 +41,17 @@ const mainFunc = function(props, { slots, emit }) {
     // 編譯器會把宣告那行與解構賦值那行搞混成一行
     // 所以要用分號隔開
     let newList = [...props.modelValue]
-    ;[newList[from], newList[to]] = [newList[to], newList[from]]
+    // ;[newList[from], newList[to]] = [newList[to], newList[from]]
+    ;if (to > from) {
+      newList.splice(to, 0, props.modelValue[from])
+      newList.splice(from, 1)
+    } else {
+      newList.splice(to, 0, props.modelValue[from])
+      newList.splice(from - 1, 1)
+    }
     console.log(newList)
     fromDom = toDom
     emit('update:modelValue', newList)
-  }
-
-  function swap(from, to) {
-    console.log('swap function!')
-    const fromIndex = parseInt(from.getAttribute('id'))
-    const toIndex = parseInt(to.getAttribute('id'))
-    updatePostion(fromIndex, toIndex)
   }
 
   return () => {
