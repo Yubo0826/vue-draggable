@@ -1,40 +1,105 @@
-# draggable-vue
+Vue3 component for drag & drop html element
 
-This template should help get you started developing with Vue 3 in Vite.
+## Demo
 
-## Recommended IDE Setup
+https://yubo0826.github.io/vue-draggable/
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## **Installation**
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```jsx
+npm i vue-draggable-yubo
 ```
 
-### Compile and Hot-Reload for Development
+## Use
 
-```sh
-npm run dev
+```html
+<draggable tag="div" v-model="playerList" v-slot="{ element }">
+  <div class="draggable" :style="{'background': element.color}">
+    {{ element.name }}, {{ element.number }}
+  </div>
+</draggable>
 ```
 
-### Type-Check, Compile and Minify for Production
+```js
+import draggable from 'vue-draggable-yubo'
+...
+  export default {
+        components: {
+            draggable,
+        },
+        data() {
+          return {
+            playerList: [{name: 'J.Lee', number: 35}, {name: 'H.Chi', number: 27}]
+          }
+        },
+  ...
+```
 
-```sh
-npm run build
+## Props
+
+### modelValue
+
+type: Array
+
+required: true
+
+Input an array to render a list of draggable elements.
+
+```js
+<draggable v-model="myArray">
+```
+
+### tag
+
+type: String
+
+default: div
+
+required: false
+
+The type of root node in HTML. 
+
+```js
+<draggable v-model="myArray" tag="tr">
+```
+
+### handle
+
+type: String
+
+required: false
+
+Input the class name. Dragging can only be achieved by dragging elements with this class.
+
+```js
+<draggable v-model="myArray" handle="handle" tag="tr" v-slot="{ element }">
+	<div class="item">
+		<i class="fa fa-align-justify handle"></i>
+    {{ element.name }}
+  </div>
+</draggable>
+```
+
+### transition-name
+
+type: String
+
+required: false
+
+In order to make animation during dragging element. The animation is based on Vue transition-group component, so this attribute refers to <TransitionGroup> props. It is worth nothing that you have to set a transition css `'your name'-move`for animation.
+
+Suggested to read [Vue Docs for transition-group](https://vuejs.org/guide/built-ins/transition-group.html).
+
+```js
+<draggable 
+	v-model="myArray"
+	tag="div"
+	transition-name="list"
+	>
+```
+
+```css
+.list-move {
+  transition: transform 0.15s;
+}
 ```

@@ -1,6 +1,6 @@
 {
   "name": "vue-draggable-yubo",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "type": "module",
   "files": ["dist"],
   "main": "./dist/vue-draggable.umd.cjs",

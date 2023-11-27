@@ -1,12 +1,11 @@
 <template>
   <div class="page">
-    <p>{{ count }}</p>
     <draggable 
-      tag="div" 
+      tag="transition-group" 
       handle="handle" 
       v-model="list" 
       v-slot="{ element, key }" 
-      :transition="list"
+      transition-name="list"
       >
       <div :key="key" class="draggable" :style="{'background': element.color}">
         <div class="handle">
@@ -39,14 +38,14 @@
           <th v-for="header in headers" :key="header">{{ header }}</th>
         </tr>
       </thead>
-      <draggable tag="tbody" v-model="list" v-slot="{ element, key }" :transition="list">
+      <draggable tag="tbody" v-model="list" v-slot="{ element, key }">
         <tr :key="key">
           <td v-for="header in headers" :key="header">{{ element[header] }}</td>
         </tr>
       </draggable>
     </table>
 
-    <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" target="_blank">View Code</a>
+    <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" class="effect effect-1" target="_blank">View Code</a>
 
   </div>
 </template>
@@ -61,8 +60,6 @@ interface Item {
   number: number;
   color: string;
 }
-
-const count = ref(0)
 
 const train = ref<string[]>(['a', 'b', 'c', 'd', 'e'])
 
@@ -127,28 +124,9 @@ const list = ref<Item[]>([
   }
 ])
 
-function change(value: number) {
-  count.value += value
-}
-
-function test() {
-  train.value.reverse()
-}
-
-function addtrainItem() {
-  train.value.push('f')
-}
-
-function test3() {
-  [items.value[0], items.value[2]] = [items.value[2], items.value[0]]
-}
-
 </script>
 
 <style>
-.test {
-  position: relative;
-}
 .container {
   position: relative;
 }
@@ -213,5 +191,48 @@ tbody tr:nth-child(even) {
 .list-leave-active {
   position: absolute;
 } */
+
+.effect {
+	 text-align: center;
+	 display: inline-block;
+	 position: relative;
+	 text-decoration: none;
+	 color: #4e4c4c;
+	 text-transform: capitalize;
+	/* background-color: - add your own background-color */
+	 font-family: 'Roboto', sans-serif;
+	/* put your font-family */
+	 font-size: 18px;
+	 padding: 20px 0px;
+	 width: 150px;
+	 border-radius: 6px;
+	 overflow: hidden;
+}
+
+.effect.effect-1 {
+	 transition: all 0.2s linear 0s;
+}
+ .effect.effect-1:before {
+	 content: "👉";
+	 font-family: FontAwesome;
+	 font-size: 15px;
+	 position: absolute;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 right: 0;
+	 top: 0;
+	 opacity: 0;
+	 height: 100%;
+	 width: 40px;
+	 transition: all 0.2s linear 0s;
+}
+ .effect.effect-1:hover {
+	 text-indent: -20px;
+}
+ .effect.effect-1:hover:before {
+	 opacity: 1;
+	 text-indent: 0px;
+}
 
 </style>

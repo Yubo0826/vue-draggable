@@ -4,7 +4,7 @@ interface DraggableProps {
   modelValue: Array<any>;
   tag: string;
   handle?: string;
-  transition?: boolean;
+  transitionData?: Object;
 }
 
 const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
@@ -28,7 +28,6 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
     for (let i = 0; i < itemList.length; i++) {
       itemList[i].setAttribute('index', i.toString())
       itemList[i].addEventListener('dragenter', dragEnter)
-      itemList[i].addEventListener('dragover', dragOver)
       // 為handle加上所需屬性
       if (props.handle) {
         let handleList = itemList[i].getElementsByClassName(
@@ -72,13 +71,9 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
 
     // transition-group在進行move動畫時，會在被移動的元素上加上class: list-move
     // 所以要避免在移動時觸發dragenter
-    if (fromIndex !== toIndex && !event.currentTarget.classList.contains(`${props.name}-move`)) {
+    if (fromIndex !== toIndex && !event.currentTarget.classList.contains(`${props.transitionName}-move`)) {
       updatePostion(fromIndex, toIndex)
     }
-  }
-
-  function dragOver() {
-    console.log('dragOver')
   }
 
   function updatePostion(from: number, to: number, transitionDuration: float) {
@@ -106,14 +101,14 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
         key: item
       })
     })
-    if (props.transition) {
+    if (props.transitionName) {
       return h(
         props.tag,
         { ref: wrapDom },
         h(
           TransitionGroup,
           {
-            name: 'list'
+            name: props.transitionName || 'fade'
           },
           () => slotNodes
         )
@@ -144,10 +139,16 @@ const props = {
     type: String,
     required: false
   },
-  transition: {
+  transitionName: {
     type: String,
     required: false
   },
+  // transitionData: {
+  //   type: Object,
+  //   default() {
+  //     return {transition: false, name: '' }
+  //   }
+  // },
   move: {
     type: Function,
     required: false
