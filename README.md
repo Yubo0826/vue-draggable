@@ -23,16 +23,17 @@ npm i vue-draggable-yubo
 ```js
 import draggable from 'vue-draggable-yubo'
 ...
-  export default {
-        components: {
-            draggable,
-        },
-        data() {
-          return {
-            playerList: [{name: 'J.Lee', number: 35}, {name: 'H.Chi', number: 27}]
-          }
-        },
-  ...
+export default {
+  components: {
+      draggable,
+  },
+  data() {
+    return {
+      playerList: [{name: 'J.Lee', number: 35}, {name: 'H.Chi', number: 27}]
+    }
+  },
+...
+} 
 ```
 
 ## Props
@@ -73,8 +74,8 @@ Input the class name. Dragging can only be achieved by dragging elements with th
 
 ```js
 <draggable v-model="myArray" handle="handle" tag="tr" v-slot="{ element }">
-	<div class="item">
-		<i class="fa fa-align-justify handle"></i>
+  <div class="item">
+    <i class="fa fa-align-justify handle"></i>
     {{ element.name }}
   </div>
 </draggable>
@@ -92,10 +93,10 @@ Suggested to read [Vue Docs for transition-group](https://vuejs.org/guide/built-
 
 ```js
 <draggable 
-	v-model="myArray"
-	tag="div"
-	transition-name="list"
-	>
+  v-model="myArray"
+  tag="div"
+  transition-name="list"
+>
 ```
 
 ```css
