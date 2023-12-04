@@ -6,21 +6,22 @@ import { resolve } from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/draggable.ts'),
-      name: 'VueDraggable',
-      fileName: 'vue-draggable'
-    },
-    rollupOptions: {
-      external: ['vue'],
-      output: {
-        globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  },
+  // 只build套件(draggable.ts)打開build屬性
+  // build: {
+  //   lib: {
+  //     entry: resolve(__dirname, 'src/draggable.ts'),
+  //     name: 'VueDraggable',
+  //     fileName: 'vue-draggable'
+  //   },
+  //   rollupOptions: {
+  //     external: ['vue'],
+  //     output: {
+  //       globals: {
+  //         vue: 'Vue'
+  //       }
+  //     }
+  //   }
+  // },
   base: '/vue-draggable',
   plugins: [vue()],
   resolve: {

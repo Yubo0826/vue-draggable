@@ -1,21 +1,23 @@
 <template>
   <div class="page">
-    <draggable 
-      tag="transition-group" 
-      handle="handle" 
-      v-model="list" 
-      v-slot="{ element, key }" 
-      transition-name="list"
-      >
-      <div :key="key" class="draggable" :style="{'background': element.color}">
-        <div class="handle">
-          handle me
+    <h1>vue-draggable-yubo Demo</h1>
+    <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" class="effect effect-1" style="text-decoration: underline;" target="_blank">View Code</a>
+    <h2>Drag Box</h2>
+    <div>
+      <draggable 
+        tag="transition-group" 
+        v-model="list" 
+        v-slot="{ element, key }" 
+        transition-name="list"
+        >
+        <div :key="key" class="draggable" :style="{'background': element.color}">
+          {{ element.name }}, {{ element.number }}
         </div>
-        {{ element.name }}, {{ element.number }}
-      </div>
-    </draggable> 
+      </draggable> 
+    </div>
 
-    <div>Move Table Columns</div> 
+    <h2>Move Table Columns</h2> 
+
     <table>
       <thead>
         <draggable tag="tr" v-model="headers" v-slot="{ element }">
@@ -24,35 +26,37 @@
       </thead>
       <tbody>
         <tr v-for="item in list" :key="item.name">
-          <td v-for="header in headers" :key="header">{{ item[header] }}</td>
+          <td v-for="header in headers" :key="header">
+            <span v-if="item.hasOwnProperty(header)">
+              {{ item[header as keyof Item] }}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
 
-    
-
-    <div>Move Table Rows</div>
+    <h2>Move Table Rows & Drag the handle icon</h2>
     <table>
       <thead>
         <tr>
           <th v-for="header in headers" :key="header">{{ header }}</th>
         </tr>
       </thead>
-      <draggable tag="tbody" v-model="list" v-slot="{ element, key }">
+      <draggable tag="tbody" v-model="list" handle="handle" v-slot="{ element, key }">
         <tr :key="key">
-          <td v-for="header in headers" :key="header">{{ element[header] }}</td>
+          <td v-for="header, index in headers" :key="header">
+            <img v-if="index === 0" src="@/assets/bxs-grid.svg" class="handle">
+            {{ element[header] }}
+          </td>
         </tr>
       </draggable>
     </table>
-
-    <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" class="effect effect-1" target="_blank">View Code</a>
 
   </div>
 </template>
 
 <script setup lang="ts">
 import draggable from './draggable'
-// import draggable from './components/Draggable.vue'
 import { ref } from 'vue'
 
 interface Item {
@@ -61,15 +65,7 @@ interface Item {
   color: string;
 }
 
-const train = ref<string[]>(['a', 'b', 'c', 'd', 'e'])
-
 const headers = ref<string[]>(['name', 'number', 'color']) 
-
-const items = ref([
-  { id: 1, text: 'Learn JavaScript' },
-  { id: 2, text: 'Learn Vue' },
-  { id: 3, text: 'Build something awesome' }
-])
 
 const list = ref<Item[]>([
   {
@@ -123,7 +119,6 @@ const list = ref<Item[]>([
     color: 'orange'
   }
 ])
-
 </script>
 
 <style>
@@ -145,52 +140,56 @@ const list = ref<Item[]>([
   margin: 20px;
   margin-bottom: 50px;
   padding: 10px;
+  border-radius: 10px;
   background-color: rgb(97, 223, 124);
+  color: white;
+  cursor: grab;
 }
 .handle {
   cursor: grab;
 }
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 10px;
   margin-bottom: 30px;
   width: 500px;
 }
-tr {
-  border: 1px solid black;
-}
 thead {
-  background-color: rgb(192, 192, 192);
+  background-color: #6f7bd9;
+  color: white;
 }
 thead th {
   padding: 10px;
 }
+
+thead th:first-child {
+  border-radius: 10px 0 0 0;
+}
+thead th:last-child {
+  border-radius: 0 10px 0 0;
+}
+
+tbody td {
+  padding: 10px;
+  text-align: center;
+}
+
+tbody td img {
+  float: left;
+  cursor: grab;
+}
+
 tbody tr:nth-child(odd) {
-  background-color: rgb(97, 223, 124);
+  background-color: rgb(255, 255, 255);
 }
 tbody tr:nth-child(even) {
-  background-color: rgb(223, 97, 97);
+  background-color: rgb(233, 233, 233);
 }
 
 .list-move {
   transition: transform 0.15s;
 }
-
-/* .list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.list-leave-active {
-  position: absolute;
-} */
 
 .effect {
 	 text-align: center;

@@ -4,7 +4,7 @@ interface DraggableProps {
   modelValue: Array<any>;
   tag: string;
   handle?: string;
-  transitionData?: Object;
+  transitionName?: string;
 }
 
 const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
@@ -17,7 +17,6 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
   })
 
   onUpdated(() => {
-    console.log('onUpdated')
     updataAttribute()
   })
 
@@ -61,27 +60,27 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
   }
 
   function dragstart(event: DragEvent) {
-    fromIndex = parseInt(event.target.getAttribute('index'))
-    console.log('dragstart: ' + fromIndex)
+    const target = event.target as HTMLElement
+    if (target) {
+      fromIndex = parseInt(target.getAttribute('index') || '0')
+    }
   }
 
   function dragEnter(event: DragEvent) {
-    console.log('dragEnter')
-    toIndex = parseInt(event.currentTarget.getAttribute('index'))
+    const target = event.currentTarget as HTMLElement
+    if (target) {
+      toIndex = parseInt(target.getAttribute('index') || '0')
+    }
 
     // transition-group在進行move動畫時，會在被移動的元素上加上class: list-move
     // 所以要避免在移動時觸發dragenter
-    if (fromIndex !== toIndex && !event.currentTarget.classList.contains(`${props.transitionName}-move`)) {
+    if (fromIndex !== toIndex && !target.classList.contains(`${props.transitionName}-move`)) {
       updatePostion(fromIndex, toIndex)
     }
   }
 
-  function updatePostion(from: number, to: number, transitionDuration: float) {
-    console.log('updatePostion: ' + from + '到' + to)
+  function updatePostion(from: number, to: number) {
     let newList = [...props.modelValue]
-    // 編譯器會把宣告那行與解構賦值那行搞混成一行
-    // 所以要用分號隔開
-    // ;[newList[from], newList[to]] = [newList[to], newList[from]]
     if (to > from) {
       newList.splice(to + 1, 0, newList[from])
       newList.splice(from, 1)
@@ -95,10 +94,11 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
 
   return () => {
     // 不知道為甚麼key有index就會有問題
-    const slotNodes = props.modelValue.map((item) => {
+    const slotNodes = props.modelValue.map((item, index) => {
       return slots.default({
         element: item,
-        key: item
+        key: item,
+        index
       })
     })
     if (props.transitionName) {
@@ -117,9 +117,10 @@ const mainFunc = function(props: DraggableProps, { slots, emit }: any) {
     return h(
       props.tag,
       { ref: wrapDom },
-      props.modelValue.map((item) => {
+      props.modelValue.map((item, index) => {
         return slots.default({
-          element: item
+          element: item,
+          index
         })
       })
     )
