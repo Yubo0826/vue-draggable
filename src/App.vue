@@ -1,9 +1,11 @@
 <template>
   <div class="page">
     <h1>vue-draggable-yubo Demo</h1>
-    <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" class="effect effect-1" style="text-decoration: underline;" target="_blank">View Code</a>
+    <div style="text-align: center;">
+      <a href="https://github.com/Yubo0826/vue-draggable/blob/master/src/App.vue" class="effect effect-1" style="text-decoration: underline;" target="_blank">View Code</a>
+    </div>
     <h2>Drag Box</h2>
-    <div>
+    <div style="text-align: center;">
       <draggable 
         tag="transition-group" 
         v-model="list" 
@@ -17,40 +19,44 @@
     </div>
 
     <h2>Move Table Columns</h2> 
+    <div style="text-align: center;">
+      <table>
+        <thead>
+          <draggable tag="tr" v-model="headers" v-slot="{ element }">
+            <th>{{ element }}</th>
+          </draggable>
+        </thead>
+        <tbody>
+          <tr v-for="item in list" :key="item.name">
+            <td v-for="header in headers" :key="header">
+              <span v-if="item.hasOwnProperty(header)">
+                {{ item[header as keyof Item] }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <table>
-      <thead>
-        <draggable tag="tr" v-model="headers" v-slot="{ element }">
-          <th>{{ element }}</th>
-        </draggable>
-      </thead>
-      <tbody>
-        <tr v-for="item in list" :key="item.name">
-          <td v-for="header in headers" :key="header">
-            <span v-if="item.hasOwnProperty(header)">
-              {{ item[header as keyof Item] }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
     <h2>Move Table Rows & Drag the handle icon</h2>
-    <table>
-      <thead>
-        <tr>
-          <th v-for="header in headers" :key="header">{{ header }}</th>
-        </tr>
-      </thead>
-      <draggable tag="tbody" v-model="list" handle="handle" v-slot="{ element, key }">
-        <tr :key="key">
-          <td v-for="header, index in headers" :key="header">
-            <img v-if="index === 0" src="@/assets/bxs-grid.svg" class="handle">
-            {{ element[header] }}
-          </td>
-        </tr>
-      </draggable>
-    </table>
+    <div style="text-align: center;">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="header in headers" :key="header">{{ header }}</th>
+          </tr>
+        </thead>
+        <draggable tag="tbody" v-model="list" handle="handle" v-slot="{ element, key }">
+          <tr :key="key">
+            <td v-for="header, index in headers" :key="header">
+              <img v-if="index === 0" src="@/assets/bxs-grid.svg" class="handle">
+              {{ element[header] }}
+            </td>
+          </tr>
+        </draggable>
+      </table>
+    </div>
 
   </div>
 </template>
@@ -122,6 +128,16 @@ const list = ref<Item[]>([
 </script>
 
 <style>
+body {
+  max-width: 1200px;
+  margin: auto;
+}
+h1, h2 {
+  text-align: center;
+}
+h2 {
+  margin-top: 35px;
+}
 .container {
   position: relative;
 }
@@ -151,10 +167,18 @@ const list = ref<Item[]>([
 table {
   border-collapse: separate;
   border-spacing: 0;
-  margin: 10px;
+  margin: 10px auto;
   margin-bottom: 30px;
-  width: 500px;
+  width: 75%;
+  max-width: 1200px;
 }
+
+@media screen and (max-width: 600px) {
+  table {
+    width: 100%;
+  }
+}
+
 thead {
   background-color: #6f7bd9;
   color: white;
