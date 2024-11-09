@@ -2,7 +2,9 @@
   "name": "vue-draggable-yubo",
   "version": "1.0.4",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/vue-draggable.umd.cjs",
   "module": "./dist/vue-draggable.js",
   "exports": {
@@ -19,7 +21,8 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
-    "vue": "^3.3.2"
+    "vue": "^3.3.2",
+    "vue-draggable-yubo": "file:"
   },
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
