@@ -50,7 +50,7 @@
         <draggable tag="tbody" v-model="list" handle="handle" v-slot="{ element, key }">
           <tr :key="key">
             <td v-for="header, index in headers" :key="header">
-              <img v-if="index === 0" src="@/assets/bxs-grid.svg" class="handle">
+              <img v-if="index === 0" src="@/assets/ios-drag.svg" class="handle">
               {{ element[header] }}
             </td>
           </tr>
@@ -256,6 +256,10 @@ tbody tr:nth-child(even) {
  .effect.effect-1:hover:before {
 	 opacity: 1;
 	 text-indent: 0px;
+}
+
+.handle {
+  height: 25px;
 }
 
 </style>
